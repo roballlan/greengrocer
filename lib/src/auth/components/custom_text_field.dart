@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatefulWidget {
   final IconData icon;
   final String label;
-   bool isObscure;
+  final bool isSecret;
 
-   CustomTextField({
+  const CustomTextField({
     Key? key,
     required this.icon,
     required this.label,
-    this.isObscure = false,
+    this.isSecret = false,
   }) : super(key: key);
 
   @override
@@ -17,25 +17,32 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
+  bool isObscure = false;
 
+  @override
+  void initState() {
+    super.initState();
 
+    isObscure = widget.isSecret;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
-        obscureText: widget.isObscure,
+        obscureText: isObscure,
         decoration: InputDecoration(
             prefixIcon: Icon(widget.icon),
-            suffixIcon: widget.isObscure
+            suffixIcon: widget.isSecret
                 ? IconButton(
                     onPressed: () {
                       setState(() {
-                        widget.isObscure = !widget.isObscure;
+                        isObscure = !isObscure;
                       });
                     },
-                    icon: const Icon(Icons.visibility))
+                    icon: Icon(
+                        isObscure ? Icons.visibility : Icons.visibility_off))
                 : null,
             labelText: widget.label,
             isDense: true,
